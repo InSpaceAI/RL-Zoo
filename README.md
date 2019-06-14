@@ -5,11 +5,11 @@
 - Run in "CartPole-v1" environment.
 
 ## Algorithms
+- DQN
+- REINFORCE
 - A2C
 - DDPG
-- DQN
 - PPO
-- REINFORCE
 
 ## Reference
 
