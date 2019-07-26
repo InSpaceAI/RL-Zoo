@@ -113,7 +113,7 @@ if __name__ == "__main__":
             logp_ts = np.r_[logp_ts, logp_t]   if t else [logp_t]
             dones   = np.r_[dones, done]       if t else [done]
             rewards = np.r_[rewards, reward]   if t else [reward]
-
+            
             state = next_state
             score += 1
             if done:
