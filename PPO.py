@@ -106,15 +106,14 @@ if __name__ == "__main__":
             action, v_t, logp_t  =  action[0], v_t[0], logp_t[0]
             discrete_action = 0 if action < 0 else 1
             next_state, reward, done, info = env.step(discrete_action)
-            if t == 0:
-                states, actions, values, logp_ts, dones, rewards = [state], [action], [v_t], [logp_t], [done], [reward]
-            else:
-                states = np.r_[states, [state]]
-                actions = np.r_[actions, [action]]
-                values = np.r_[values, v_t]
-                logp_ts = np.r_[logp_ts, logp_t]
-                dones = np.r_[dones, done]
-                rewards = np.r_[rewards, reward]
+            
+            states  = np.r_[states, [state]]   if t else [state]
+            actions = np.r_[actions, [action]] if t else [action]
+            values  = np.r_[values, v_t]       if t else [v_t]
+            logp_ts = np.r_[logp_ts, logp_t]   if t else [logp_t]
+            dones   = np.r_[dones, done]       if t else [done]
+            rewards = np.r_[rewards, reward]   if t else [reward]
+            
             state = next_state
             score += 1
             if done:
