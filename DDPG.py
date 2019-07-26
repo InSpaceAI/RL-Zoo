@@ -60,8 +60,8 @@ class DDPGAgent:
         self.target_actor = Actor("target_actor")
         self.target_critic = Critic("target_critic")
         self.epsilon = epsilon_init
-        self.target_q = tf.placeholder(tf.float32, [None])
-        critic_loss = tf.losses.mean_squared_error(self.target_q, tf.squeeze(self.critic.predict_q))
+        self.target_q = tf.placeholder(tf.float32, [None, 1])
+        critic_loss = tf.losses.mean_squared_error(self.target_q, self.critic.predict_q)
         with tf.control_dependencies(self.critic.trainable_var):
             self.train_critic = tf.train.AdamOptimizer(critic_lr).minimize(critic_loss)
 
@@ -108,7 +108,7 @@ class DDPGAgent:
         target_qs = np.asarray([reward + discount_factor * (1 - done) * target_critic_predict_q
                                 for reward, target_critic_predict_q, done in zip(rewards, target_critic_predict_qs, dones)])
 
-        self.sess.run(self.train_critic, feed_dict={self.critic.state: states, self.critic.action: actions, self.target_q: np.squeeze(target_qs)})
+        self.sess.run(self.train_critic, feed_dict={self.critic.state: states, self.critic.action: actions, self.target_q: target_qs})
         actions_for_train = self.sess.run(self.actor.action, feed_dict={self.actor.state: states})
         self.sess.run(self.train_actor, feed_dict={self.actor.state: states, self.critic.state: states, self.critic.action: actions_for_train})
         self.sess.run(self.soft_update_target)
